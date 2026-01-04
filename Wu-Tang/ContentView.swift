@@ -11,8 +11,8 @@ import SwiftUI
 struct ContentView: View {
     
     @State private var enteredName = ""
-    @State private var staticCoderNameIs = "Your Wu-Tang Coder Name is:"
-    @State private var wuTangName = "Undefined Breakpoint"
+    @State private var staticCoderNameIs = ""
+    @State private var wuTangName = ""
     
     @FocusState private var IsFocused: Bool
     
@@ -94,8 +94,7 @@ struct ContentView: View {
                 .textFieldStyle(.roundedBorder)
                 .focused($IsFocused)
                 .onSubmit{
-                    wuTangName = getWuTangName(name: enteredName)
-                    IsFocused = false
+                    createName()
                 }
                 .overlay {
                     RoundedRectangle(cornerRadius: 5)
@@ -103,18 +102,16 @@ struct ContentView: View {
                 }
                 .padding()
             Button {
-                wuTangName = getWuTangName(name: enteredName)
-                IsFocused = false
+                createName()
             } label: {
                     Image("wu-tang-button")
                     Text("Get It!")
-
-                
             }
             .buttonStyle(.borderedProminent)
             .font(.title2).bold()
             .foregroundStyle(.yellow)
             .tint(.black)
+            .disabled(enteredName.isEmpty)
             
             VStack{
                 Text(staticCoderNameIs)
@@ -130,24 +127,31 @@ struct ContentView: View {
             
             
             Spacer()
-            
             Image("wu-tang")
                 .resizable()
                 .scaledToFit()
+                .opacity(IsFocused ? 0.0 : 1.0)
         }
     }
     
     private func getWuTangName(name: String) -> String {
-        
+        print("getWuTangName: \(name)")
         for firstNameIndex in 0...firstColumn.count - 1 {
-            let char = firstColumn[firstNameIndex].first
-            if char == name.first {
+            let char = firstColumn[firstNameIndex].first?.uppercased()
+            if char == name.first?.uppercased() {
                 let targetIndex = firstNameIndex-1 < 0 ? firstColumn.count-1 : firstNameIndex-1
+                
                 return "\(firstColumn[targetIndex]) \(secondColumn[Int.random(in: 0...secondColumn.count-1)])"
             }
         }
         
-        return "Undefined Breakpoint"
+        return ""
+    }
+    
+    private func createName() {
+        staticCoderNameIs = "Your Wu-Tang Coder Name is:"
+        wuTangName = getWuTangName(name: enteredName)
+        IsFocused = false
     }
     
     // class result
