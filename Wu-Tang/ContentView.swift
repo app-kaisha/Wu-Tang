@@ -14,6 +14,66 @@ struct ContentView: View {
     @State private var staticCoderNameIs = "Your Wu-Tang Coder Name is:"
     @State private var wuTangName = "Undefined Breakpoint"
     
+    private let firstColumn = ["Algorithmic",
+                               "Byte",
+                               "Cache",
+                               "Debug",
+                               "Echo",
+                               "Function",
+                               "Git",
+                               "Hex",
+                               "Infinite",
+                               "Java",
+                               "Kernel",
+                               "Logic",
+                               "Module",
+                               "Node",
+                               "Object",
+                               "Pixel",
+                               "Query",
+                               "Runtime",
+                               "Script",
+                               "Token",
+                               "Undefined",
+                               "Virtual",
+                               "Web",
+                               "Xcode",
+                               "Yota",
+                               "Zero"]
+    private let secondColumn = ["$tack",
+                                "Processor",
+                                "Cipher",
+                                "Daemon",
+                                "EndPoint",
+                                "Framework",
+                                "Gateway",
+                                "Hub",
+                                "Interrupt",
+                                "Crash",
+                                "Loop",
+                                "Module",
+                                "Nexus",
+                                "Optimizer",
+                                "Protocol",
+                                "Queue",
+                                "Router",
+                                "Stack",
+                                "Thread",
+                                "Update",
+                                "Variable",
+                                "Widget",
+                                "Terminal",
+                                "Yield",
+                                "Zen",
+                                "Ace",
+                                "Breakpoint",
+                                "Root",
+                                "Instance",
+                                "Access",
+                                "Archive",
+                                "Control",
+                                "Justice"]
+    
     var body: some View {
         VStack {
             Text("Wu-Tang\nCoder Name Generator")
@@ -36,7 +96,7 @@ struct ContentView: View {
                 }
                 .padding()
             Button {
-                
+                wuTangName = getWuTangName(name: enteredName)
             } label: {
                     Image("wu-tang-button")
                     Text("Get It!")
@@ -67,6 +127,19 @@ struct ContentView: View {
                 .resizable()
                 .scaledToFit()
         }
+    }
+    
+    private func getWuTangName(name: String) -> String {
+        
+        for firstNameIndex in 0...firstColumn.count - 1 {
+            var char = firstColumn[firstNameIndex].first
+            if char == name.first {
+                var targetIndex = firstNameIndex-1 < 0 ? firstColumn.count-1 : firstNameIndex-1
+                return "\(firstColumn[targetIndex]) \(secondColumn[Int.random(in: 0...secondColumn.count-1)])"
+            }
+        }
+        
+        return "Undefined Breakpoint"
     }
 }
 
