@@ -13,6 +13,7 @@ struct ContentView: View {
     @State private var enteredName = ""
     @State private var staticCoderNameIs = ""
     @State private var wuTangName = ""
+    @State private var imageName = "wu-tang"
     
     @FocusState private var IsFocused: Bool
     
@@ -92,6 +93,8 @@ struct ContentView: View {
             TextField("Enter name here", text: $enteredName)
                 .font(.title2)
                 .textFieldStyle(.roundedBorder)
+                .keyboardType(.asciiCapable)
+                .autocorrectionDisabled()
                 .focused($IsFocused)
                 .onSubmit{
                     createName()
@@ -100,12 +103,22 @@ struct ContentView: View {
                     RoundedRectangle(cornerRadius: 5)
                         .stroke(.gray, lineWidth: 1)
                 }
+                .onChange(of: IsFocused) {
+                    if IsFocused == true {
+                        enteredName = ""
+                        staticCoderNameIs = ""
+                        wuTangName = ""
+                        
+                        // image method to hide image - by removing
+                        imageName = ""
+                    }
+                }
                 .padding()
             Button {
                 createName()
             } label: {
-                    Image("wu-tang-button")
-                    Text("Get It!")
+                Image("wu-tang-button")
+                Text("Get It!")
             }
             .buttonStyle(.borderedProminent)
             .font(.title2).bold()
@@ -116,7 +129,7 @@ struct ContentView: View {
             VStack{
                 Text(staticCoderNameIs)
                     .multilineTextAlignment(.leading)
-                    
+                
                 Text(wuTangName)
                     .fontWeight(.black)
                     .multilineTextAlignment(.center)
@@ -127,20 +140,19 @@ struct ContentView: View {
             
             
             Spacer()
-            Image("wu-tang")
+            Image(imageName)
                 .resizable()
                 .scaledToFit()
-                .opacity(IsFocused ? 0.0 : 1.0)
+                //.opacity(IsFocused ? 0.0 : 1.0)
+                .animation(.easeInOut(duration: 0.4), value: imageName)
         }
     }
     
     private func getWuTangName(name: String) -> String {
-        print("getWuTangName: \(name)")
         for firstNameIndex in 0...firstColumn.count - 1 {
             let char = firstColumn[firstNameIndex].first?.uppercased()
             if char == name.first?.uppercased() {
                 let targetIndex = firstNameIndex-1 < 0 ? firstColumn.count-1 : firstNameIndex-1
-                
                 return "\(firstColumn[targetIndex]) \(secondColumn[Int.random(in: 0...secondColumn.count-1)])"
             }
         }
@@ -152,6 +164,7 @@ struct ContentView: View {
         staticCoderNameIs = "Your Wu-Tang Coder Name is:"
         wuTangName = getWuTangName(name: enteredName)
         IsFocused = false
+        imageName = "wu-tang"
     }
     
     // class result
@@ -160,7 +173,7 @@ struct ContentView: View {
         let firstLetter = localName.removeFirst()
         var firstColumnIndex = 0
         for i in 0..<firstColumn.count {
-            if firstColumn[i].first == firstLetter {
+            if firstColumn[i].first?.uppercased() == firstLetter.uppercased() {
                 firstColumnIndex = i == 0 ? 25 : i-1
             }
         }
