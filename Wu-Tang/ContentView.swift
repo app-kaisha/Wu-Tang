@@ -132,14 +132,28 @@ struct ContentView: View {
     private func getWuTangName(name: String) -> String {
         
         for firstNameIndex in 0...firstColumn.count - 1 {
-            var char = firstColumn[firstNameIndex].first
+            let char = firstColumn[firstNameIndex].first
             if char == name.first {
-                var targetIndex = firstNameIndex-1 < 0 ? firstColumn.count-1 : firstNameIndex-1
+                let targetIndex = firstNameIndex-1 < 0 ? firstColumn.count-1 : firstNameIndex-1
                 return "\(firstColumn[targetIndex]) \(secondColumn[Int.random(in: 0...secondColumn.count-1)])"
             }
         }
         
         return "Undefined Breakpoint"
+    }
+    
+    // class result
+    private func getWuTangNameSolution(name: String) -> String {
+        var localName = name
+        let firstLetter = localName.removeFirst()
+        var firstColumnIndex = 0
+        for i in 0..<firstColumn.count {
+            if firstColumn[i].first == firstLetter {
+                firstColumnIndex = i == 0 ? 25 : i-1
+            }
+        }
+        
+        return "\(firstColumn[firstColumnIndex]) \(secondColumn.randomElement()!)"
     }
 }
 
