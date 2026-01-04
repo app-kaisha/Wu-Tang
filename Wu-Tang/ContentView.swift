@@ -14,6 +14,8 @@ struct ContentView: View {
     @State private var staticCoderNameIs = "Your Wu-Tang Coder Name is:"
     @State private var wuTangName = "Undefined Breakpoint"
     
+    @FocusState private var IsFocused: Bool
+    
     private let firstColumn = ["Algorithmic",
                                "Byte",
                                "Cache",
@@ -90,6 +92,11 @@ struct ContentView: View {
             TextField("Enter name here", text: $enteredName)
                 .font(.title2)
                 .textFieldStyle(.roundedBorder)
+                .focused($IsFocused)
+                .onSubmit{
+                    wuTangName = getWuTangName(name: enteredName)
+                    IsFocused = false
+                }
                 .overlay {
                     RoundedRectangle(cornerRadius: 5)
                         .stroke(.gray, lineWidth: 1)
@@ -97,6 +104,7 @@ struct ContentView: View {
                 .padding()
             Button {
                 wuTangName = getWuTangName(name: enteredName)
+                IsFocused = false
             } label: {
                     Image("wu-tang-button")
                     Text("Get It!")
